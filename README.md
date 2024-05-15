@@ -38,11 +38,11 @@ python train.py --batch 32 --epochs 5 --img 640 --device 0 --min-items 0 --data 
 5. После окончания обучения в докере результат обучения сохраняется в папке "runs/train/exp". Чтобы перенести ее на вашу систему, выполните следующую команду (не в докере, а в терминале вашей системы) `docker cp`, указав путь к папке в контейнере и путь на вашей системе, куда вы хотите скопировать файл.
 
 ```bash
-docker cp <container_id>:runs/train/exp .
+docker cp <container_id>:workspace/runs/train/exp .
 ```
 
 Например:
 
 ```bash
-docker cp <container_id>:runs/train/exp .
+docker cp <container_id>:workspace/runs/train/exp .
 ```
