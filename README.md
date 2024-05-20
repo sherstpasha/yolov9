@@ -32,7 +32,7 @@ python train.py --batch 16 --epochs 300 --img 640 --device 0 --min-items 0 --dat
 
 Например:
 ```bash
-python train.py --batch 32 --epochs 5 --img 640 --device 0 --min-items 0 --data mounted_folder/data/data.yaml  --weights mounted_folder/gelan-c.pt --cfg models/detect/gelan-c.yaml --hyp hyp.scratch-high.yaml --workers 0
+python train.py --batch 32 --epochs 5 --img 640 --device 0 --min-items 0 --data mounted_folder/data/data.yaml --project mounted_folder/ --weights mounted_folder/gelan-c.pt --cfg models/detect/gelan-c.yaml --hyp hyp.scratch-high.yaml --workers 0
 ```
 
 5. После окончания обучения в докере результат обучения сохраняется в папке "runs/train/exp". Чтобы перенести ее на вашу систему, выполните следующую команду (не в докере, а в терминале вашей системы) `docker cp`, указав путь к папке в контейнере и путь на вашей системе, куда вы хотите скопировать файл.
