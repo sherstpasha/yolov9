@@ -1,0 +1,1 @@
+ python train.py --batch 32 --epochs 5 --img 640 --device 0 --min-items 0 --data C:\Users\user\Desktop\data_and_weight\data\data.yaml --project C:/Users/user/Desktop/data_and_weight/ --weights  C:/Users/user/Desktop/data_and_weight/gelan-c.pt --cfg models/detect/gelan-c.yaml --hyp hyp.scratch-high.yaml --workers 0
