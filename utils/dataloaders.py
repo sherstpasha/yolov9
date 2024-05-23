@@ -334,6 +334,36 @@ class LoadImages:
     def __len__(self):
         return self.nf  # number of files
 
+class LoadCV2Image:
+    def __init__(self, image, img_size=640, stride=32, auto=True, transforms=None):
+        self.img_size = img_size
+        self.stride = stride
+        self.files = [image]
+        self.nf = 1  # number of files
+        self.mode = 'image'
+        self.auto = auto
+        self.transforms = transforms  # optional
+
+    def __iter__(self):
+        self.count = 0
+        return self
+
+    def __next__(self):
+        if self.count == self.nf:
+            raise StopIteration
+        im0 = self.files[self.count]  # BGR
+        s = f'image {self.count + 1}/{self.nf}'
+
+        if self.transforms:
+            im = self.transforms(im0)  # transforms
+        else:
+            im = letterbox(im0, self.img_size, stride=self.stride, auto=self.auto)[0]  # padded resize
+            im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+            im = np.ascontiguousarray(im)  # contiguous
+
+        self.count += 1
+        return s, im, im0, None, s
+
 
 class LoadStreams:
     # YOLOv5 streamloader, i.e. `python detect.py --source 'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP streams`
