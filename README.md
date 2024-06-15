@@ -11,8 +11,14 @@ git clone https://github.com/sherstpasha/yolov9
 2. Соберите Docker контейнер:
 
 ```bash
+docker build -t container_name .
+```
+
+Например:
+ ```bash
 docker build -t yolo9 .
 ```
+
 
 3. Запустите контейнер с графическим процессором (монтируйте папку с данными):
 
@@ -39,4 +45,15 @@ python train.py --batch 32 --epochs 5 --img 640 --device 0 --min-items 0 --data 
 
 5. После окончания обучения в докере результат обучения сохраняется в папке, которая была указана как "--project path/to/project_folder"
 
-Запуск 
+## Запуск Телеграм бота
+
+Для запуска бота выполните команду:
+```bash
+python run_bot.py --model path/to/model 
+```
+
+Например:
+```bash
+python run_bot.py --model mounted_folder/best_weights.pt
+```
+
