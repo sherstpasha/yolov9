@@ -38,12 +38,7 @@ def parse_args():
         default="best.pt",
         help="Path to the weights file for object detection.",
     )
-    parser.add_argument(
-        "--device",
-        type=str,
-        default="cpu",
-        help="Device to run the detection on (cpu/gpu).",
-    )
+
     return parser.parse_args()
 
 
@@ -77,28 +72,24 @@ def preprocess_image(image, image_processor):
     return transforms(image)
 
 
-def process_images(image_dir, conf_thres, weights, device):
+def process_images(image_dir, conf_thres, weights):
+    device_yolo = 0 if torch.cuda.is_available() else "cpu"
+    device_vit = "cuda" if torch.cuda.is_available() else "cpu"
 
-    # Запуск YOLO детекции с преобразованным форматом устройства
+    # Результаты детекции с использованием YOLO
     results = detect_image(
         weights=weights,
         source=image_dir,
         conf_thres=conf_thres,
-        device=device,
+        device=device_yolo,
     )
 
-    # Инициализация модели классификации ViT
+    # Инициализация модели классификации
     output_dir = "sherstpasha/ViT_welding_defects"
     model = ViTForImageClassification.from_pretrained(output_dir)
-
-    # Подготавливаем устройство для ViT
-    vit_device = "CUDA" if isinstance(device, int) else device
-
-    # Перемещаем модель ViT на нужное устройство
-    model.to(vit_device)
-
+    model.to(device_vit)
     image_processor = ViTImageProcessor.from_pretrained(output_dir)
-
+    print(results)
     # Обработка результатов детекции
     for result in results:
         image_path = result["path"]
@@ -110,19 +101,16 @@ def process_images(image_dir, conf_thres, weights, device):
             processed_img = preprocess_image(cropped_img, image_processor)
             processed_img = processed_img.unsqueeze(0)  # Добавляем batch dimension
 
-            # Перемещаем тензор изображения на нужное устройство
-            processed_img = processed_img.to(vit_device)
-
             # Классификация изображения
             model.eval()
             with torch.no_grad():
-                outputs = model(processed_img)
+                outputs = model(processed_img.to(device_vit))
                 logits = outputs.logits
                 predicted_class_idx = logits.argmax(-1).item()
 
             # Обновление класса и конфиденциальности
             result["cls"] = predicted_class_idx
-
+    print(results)
     return results
 
 
@@ -287,7 +275,7 @@ def count_defects(bboxes):
 
 # Обработчик полученных файлов и сообщений
 async def handle_file(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, weights: str, device: str
+    update: Update, context: ContextTypes.DEFAULT_TYPE, weights: str
 ) -> None:
     user_id = update.message.from_user.id
     conf_thres = USER_CONFIDENCE.get(user_id, 0.1)
@@ -304,7 +292,7 @@ async def handle_file(
             with open(os.path.join(image_dir, "photo.jpg"), "wb") as img_file:
                 img_file.write(photo_bytes)
 
-            detection_results = process_images(image_dir, conf_thres, weights, device)
+            detection_results = process_images(image_dir, conf_thres, weights)
             results = {"photo.jpg": detection_results}
             counts, total = count_defects(detection_results)
 
@@ -348,9 +336,7 @@ async def handle_file(
                 with open(os.path.join(image_dir, "photo.jpg"), "wb") as img_file:
                     img_file.write(photo_bytes)
 
-                detection_results = process_images(
-                    image_dir, conf_thres, weights, device
-                )
+                detection_results = process_images(image_dir, conf_thres, weights)
                 results = {"photo.jpg": detection_results}
                 counts, total = count_defects(detection_results)
 
@@ -401,9 +387,7 @@ async def handle_file(
                         img_file.write(img_data)
 
                 # Обрабатываем изображения
-                detection_results = process_images(
-                    image_dir, conf_thres, weights, device
-                )
+                detection_results = process_images(image_dir, conf_thres, weights)
 
                 # Преобразуем результаты в нужный формат
                 results = {}
@@ -492,9 +476,7 @@ def main() -> None:
     application.add_handler(
         MessageHandler(
             filters.Document.ALL | filters.PHOTO,
-            lambda update, context: handle_file(
-                update, context, args.weights, args.device
-            ),
+            lambda update, context: handle_file(update, context, args.weights),
         )
     )
 
