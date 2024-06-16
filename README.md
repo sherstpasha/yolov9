@@ -54,7 +54,7 @@ python main.py --weights path/to/weights.pt --token your_telegram_api_token
 python main.py --weights mounted_folder/best_weights.pt --token 1234567890:BBIJ_YDFW_QGhhfrLMRXYOHqqrZyUMvwXUy
 ```
 
-## Запуск телеграмм бота через ноутбук
+## Запуск телеграм бота через ноутбук
 
 Для этого достаточно запустить [ноутбук](https://colab.research.google.com/drive/1-SIQQNbmShljF5Zg5OS8bDlMHvthDNJW?usp=sharing) и выполнить ячейку "ЗАПУСК БОТА", предварительно передав токен.
 
