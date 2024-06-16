@@ -44,7 +44,7 @@ docker run --gpus all -it -v /путь/к/вашей/папке:/workspace/mount
 docker run --gpus all -it -v C:/Users/user/Desktop/data_and_weight:/workspace/mounted_folder yolo9
 ```
 
-### 4. Запустите телеграмм бот, выполнив команду:
+### 4. Запустите телеграм бота, выполнив команду:
 ```bash
 python main.py --weights path/to/weights.pt --token your_telegram_api_token
 ```
