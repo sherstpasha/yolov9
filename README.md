@@ -1,6 +1,18 @@
-## Обучение
+## Описание решения
 
-Ниже описан процесс обучения модели yolov9 в контейнере. Для запуска необходимо установить Docker.
+В данном репозитории описано решение команды Центр ИИ для задачи "Определение и классификация дефектов сварных швов с помощью ИИ" 
+
+Модель Yolov9 https://drive.google.com/file/d/18VjW3AztQILnj_6YFHMPRuawGR-48f9A/view?usp=drive_link
+Модель ViT https://drive.google.com/drive/folders/1ajqhnrkoffJSgxMBJ7z88ge6tCXyHt5V?usp=sharing
+Ноутбук для запуска бота и получения предсказания https://colab.research.google.com/drive/1GGM9bq4PJP4FiPiIhU5tpzh-AO71mipf?usp=sharing
+
+
+Воспроизвести решение можно двумя способами:
+1) Собрать докер контейнер и запустить телеграм бота, передав ему токен;
+2) Запустить телеграм бота с помощью сервиса google colab, используя этот ноутбук.
+
+
+## Запуск Телеграм бота через контейнер
 
 ### 1. Склонируйте репозиторий:
 
@@ -30,29 +42,15 @@ docker run --gpus all -it -v /путь/к/вашей/папке:/workspace/mount
 docker run --gpus all -it -v C:/Users/user/Desktop/data_and_weight:/workspace/mounted_folder yolo9
 ```
 
-### 4. Теперь, когда вы находитесь в контейнере, вы можете запустить `train.py` с помощью следующей команды, чтобы начать обучение модели:
-
+### 4. Запустите телеграмм бот, выполнив команду:
 ```bash
-python train.py --batch 16 --epochs 300 --img 640 --device 0 --min-items 0 --data path/to/data.yaml --weights path/to/weights.pt --cfg models/detect/config_file.yaml --hyp path/to/hyp_file.yaml --project path/to/project_folder
+python main.py --weights path/to/weights.pt --token your_telegram_api_token
 ```
 
 Например:
 ```bash
-python train.py --batch 32 --epochs 5 --img 640 --device 0 --min-items 0 --data mounted_folder/data/data.yaml --project mounted_folder/ --weights mounted_folder/gelan-c.pt --cfg models/detect/gelan-c.yaml --hyp hyp.scratch-high.yaml --project mounted_folder/
+python main.py --weights mounted_folder/best_weights.pt --token 1234567890:BBIJ_YDFW_QGhhfrLMRXYOHqqrZyUMvwXUy
 ```
 
-### 5. После окончания обучения в докере результат обучения сохраняется в папке, которая была указана как "--project path/to/project_folder".
+## Запуск телеграмм бота через ноутбук
 
-## Запуск Телеграм бота
-
-### Для запуска бота выполните команду:
-```bash
-python run_bot.py --model path/to/model 
-```
-
-Например:
-```bash
-python run_bot.py --model mounted_folder/best_weights.pt
-```
-
-Такой формат делает шаги более явными, а блоки с примерами отделяет для улучшенной читаемости.
