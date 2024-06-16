@@ -19,3 +19,4 @@ pandas>=1.1.4
 seaborn>=0.11.0
 albumentations>=1.0.3
 pycocotools>=2.0
+transformers
