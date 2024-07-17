@@ -3,12 +3,6 @@
 1. Склонируйте репозиторий:
 
 ```bash
-git clone https://github.com/sherstpasha/yolov9
-```
-
-2. Соберите Docker контейнер:
-
-```bash
 docker build -t yolo9 .
 ```
 
@@ -43,6 +37,3 @@ docker cp <container_id>:workspace/runs/train/exp .
 
 Например:
 
-```bash
-docker cp <container_id>:workspace/runs/train/exp .
-```
