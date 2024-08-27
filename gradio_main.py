@@ -16,7 +16,7 @@ use_dual_function = (
 
 # Путь к весам модели
 weight_path = (
-    r"C:\Users\pasha\OneDrive\Рабочий стол\yolo_weights\yolo_word_detectino21.pt"
+    r"C:\Users\user\Desktop\crispi_defects\data\exp3\weights\best.pt"
 )
 
 
@@ -177,4 +177,4 @@ with gr.Blocks() as demo:
     file_input.clear(fn=reset_interface, inputs=None, outputs=[output_image])
 
 # Запуск интерфейса с параметром share=False
-demo.launch(share=False)
+demo.launch(share=True)
