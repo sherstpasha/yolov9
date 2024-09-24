@@ -1,0 +1,1 @@
+docker run --gpus all -it -v C:/Users/user/Desktop/models_defects:/workspace/mounted_folder container_3
